@@ -1,11 +1,109 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import publications from '../data/publications.json';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
+const updates = [
+  ...posts.map(post => ({
+    added: post.data.added,
+    title: post.data.title,
+    href: `/blog/${post.id}/`,
+    emoji: '✍️',
+    kind: 'Blog post',
+    draft: post.data.draft,
+  })),
+  ...publications.map(paper => ({
+    added: paper.added,
+    title: paper.title,
+    href: `/publications/#${paper.id}`,
+    emoji: '📄',
+    kind: 'Publication',
+    draft: false,
+  })),
+].sort((a, b) => b.added.localeCompare(a.added)).slice(0, 6);
 ---
-
-<Layout>
-	<Welcome />
+<Layout title="About">
+  <section class="intro">
+    <div class="profile">
+      <img src="/images/prof_pic.webp" alt="Giovanni Affatato" width="500" height="635" />
+      <ul class="profile-links" aria-label="Contact and profiles">
+        <li><a href="mailto:giovanni.affatato@polimi.it">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 6 9 7 9-7" /></svg>
+          Email
+        </a></li>
+        <li><a href="https://github.com/heyGio">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21v-4c-4 1-6-2-6-2m12 6v-4c0-1-.3-1.5-1-2 3-.4 5-1.7 5-5 0-1.5-.5-2.5-1-3 .2-1 .2-2-.3-3L14 5a12 12 0 0 0-4 0L6.3 4C5.8 5 5.8 6 6 7c-.5.5-1 1.5-1 3 0 3.3 2 4.6 5 5-.7.5-1 1-1 2" /></svg>
+          GitHub
+        </a></li>
+        <li><a href="https://www.linkedin.com/in/giovanni-affatato/">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M7.5 10v7m4-7v7m0-4a3 3 0 0 1 6 0v4" /><circle cx="7.5" cy="7" r="1" fill="currentColor" stroke="none" /></svg>
+          LinkedIn
+        </a></li>
+        <li><a href="https://orcid.org/0009-0003-8017-2119">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M7 10v7m4-10v10h2a5 5 0 0 0 0-10Z" /><circle cx="7" cy="7" r="1" fill="currentColor" stroke="none" /></svg>
+          ORCID
+        </a></li>
+        <li><a href="https://scholar.google.com/citations?user=sk2K_UQAAAAJ">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m2 8 10-5 10 5-10 5Zm4 2v7c3 3 9 3 12 0v-7m4-2v8" /></svg>
+          Google Scholar
+        </a></li>
+      </ul>
+      <a class="meta profile-quote" href="https://www.youtube.com/watch?v=Y6ljFaKRTrI" title="Watch on YouTube">“You just keep on trying till you run out of cake.” — GLaDOS</a>
+    </div>
+    <div class="about-copy">
+      <h1>Hello, I'm Giovanni.</h1>
+      <p>I'm a PhD student at the <a href="https://ispl.deib.polimi.it/">Image and Sound Processing Lab</a>, Politecnico di Milano.</p>
+      <p>My research focuses on multimedia forensics, particularly video deepfake detection methods using deep learning and computer vision.</p>
+      <p>I developed <a href="https://dcmlab.github.io/midiVERTO/#/">midiVERTO</a>, an open-source web application for interactive music visualization.</p>
+      <h2>Research & writing</h2>
+      <p>Browse my <a href="/publications/">publications</a> or visit the <a href="/blog/">blog</a> for notes and explanations.</p>
+    </div>
+  </section>
+  <section id="updates" aria-labelledby="updates-title">
+    <h2 id="updates-title">Updates</h2>
+    <ul class="updates-list">
+      {updates.map(update => <li>
+        <time class="meta" datetime={update.added}>{update.added}</time>
+        {' · '}<span role="img" aria-label={update.kind}>{update.emoji}</span>
+        {' Added '}<a href={update.href}>{update.title}</a>.
+        {update.draft && <span class="meta"> · Draft · local preview only</span>}
+      </li>)}
+    </ul>
+  </section>
 </Layout>
+<style>
+  .intro { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 2rem; align-items: start; }
+  .profile img { display: block; width: 250px; max-width: 100%; height: auto; margin: 0 auto; border-radius: 50px; }
+  .profile-quote {
+    display: block;
+    width: 100%;
+    margin: 1rem 0 0;
+    padding: .85rem .75rem;
+    border: 1px solid var(--line);
+    border-left: 6px solid var(--accent);
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+  }
+  .profile-quote:hover, .profile-quote:focus-visible,
+  .profile-links a:hover, .profile-links a:focus-visible {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .about-copy > :first-child { margin-top: 0; }
+  .updates-list { margin: 0; padding-left: 1.25rem; }
+  .updates-list li { margin: .6rem 0; padding-left: .25rem; }
+  .updates-list time { white-space: nowrap; }
+  .profile-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; list-style: none; padding: 0; margin: .65rem 0 0; }
+  .profile-links li:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; }
+  .profile-links a { display: flex; align-items: center; justify-content: center; gap: .3rem; min-height: 32px; padding: .25rem .35rem; border: 1px solid var(--line); border-radius: 6px; color: var(--accent); font-size: .75rem; line-height: 1.5; text-decoration: none; }
+  .profile-links svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+  @media (max-width: 700px) {
+    .intro { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+    .profile { width: min(100%, 250px); justify-self: center; }
+    .profile img { width: 250px; }
+  }
+</style>

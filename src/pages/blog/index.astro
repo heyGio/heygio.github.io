@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+const posts = (await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft))
+  .sort((a, b) => b.data.date.localeCompare(a.data.date));
+---
+<Layout title="Blog" description="Notes and technical explanations by Giovanni Affatato.">
+  <p class="eyebrow">Notes & explanations</p>
+  <h1>Blog</h1>
+  <ul class="entries">
+    {posts.map(post => <li>
+      <p class="meta"><time datetime={post.data.date}>{post.data.date}</time>{post.data.draft && ' · Draft · local preview only'}</p>
+      <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
+      <p>{post.data.description}</p>
+    </li>)}
+  </ul>
+</Layout>

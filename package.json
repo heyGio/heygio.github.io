@@ -1,5 +1,7 @@
 {
-  "name": "",
+  "name": "giovanni-affatato-site",
+  "private": true,
+  "packageManager": "pnpm@10.34.5",
   "type": "module",
   "version": "0.0.1",
   "scripts": {

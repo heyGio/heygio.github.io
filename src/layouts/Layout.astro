@@ -1,22 +1,80 @@
+---
+import GazeEye from '../components/GazeEye.astro';
+interface Props { title: string; description?: string; draft?: boolean }
+const { title, description = 'Giovanni Affatato, PhD student researching multimedia forensics, deep learning, and computer vision.', draft = false } = Astro.props;
+const path = Astro.url.pathname;
+---
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<meta name="description" content={description} />
+		{draft && <meta name="robots" content="noindex, nofollow" />}
+		<title>{title} · Giovanni Affatato</title>
 	</head>
 	<body>
-		<slot />
+		<header>
+			<GazeEye />
+			<nav aria-label="Main navigation">
+				{[['/', 'About'], ['/publications/', 'Publications'], ['/blog/', 'Blog']].map(([href, label]) =>
+					<a href={href} aria-current={(href === '/' ? path === '/' : path.startsWith(href)) ? 'page' : undefined}>{label}</a>
+				)}
+			</nav>
+		</header>
+		<main id="main"><slot /></main>
+		<footer>© <span id="copyright-year">{new Date().getFullYear()}</span> Giovanni Affatato</footer>
 	</body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
+<script>
+	document.getElementById('copyright-year')!.textContent = String(new Date().getFullYear());
+</script>
+
+<style is:global>
+	/* Iris-blue accents with cool slate neutrals; darker links in light mode. */
+	:root {
+		color-scheme: light dark;
+		--bg: #f5f8fa; /* Page background */
+		--ink: #1d2833; /* Primary text */
+		--muted: #526477; /* Slate: secondary text and metadata */
+		--accent: #24648e; /* Deeper iris blue: readable links and focus indicators */
+		--line: #ccd7e1; /* Cool borders and separators */
 	}
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--bg: #121820;
+			--ink: #eef4f8;
+			--muted: #9dacc0;
+			--accent: #96d1f5;
+			--line: #334152;
+		}
+	}
+	* { box-sizing: border-box; }
+	html { overflow-y: scroll; }
+	body { margin: 0 auto; padding: 0 1.5rem; max-width: 980px; background: var(--bg); color: var(--ink); font: 18px/1.75 system-ui, sans-serif; }
+	a { color: var(--accent); text-underline-offset: .2em; }
+	a:hover { text-decoration-thickness: 2px; }
+	a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+	header { display: flex; justify-content: space-between; align-items: center; gap: 2rem; padding: .75rem 0; border-bottom: 1px solid var(--line); }
+	nav { display: flex; gap: 1.5rem; font-size: 1.125rem; font-weight: 500; line-height: 1.4; }
+	nav a { display: inline-flex; align-items: center; min-height: 36px; text-decoration: none; } nav a[aria-current] { text-decoration: underline; }
+	main { min-height: 65vh; padding: 2rem 0 3.5rem; }
+	h1,h2,h3 { line-height: 1.25; letter-spacing: -.035em; }
+	h1 { font-size: clamp(2.2rem, 6vw, 3.7rem); margin: 0 0 1.5rem; }
+	h2 { font-size: 1.65rem; margin-top: 2.5rem; }
+	h3 { font-size: 1.2rem; }
+	p { max-width: 68ch; }
+	.eyebrow, .meta { color: var(--muted); font: .85rem/1.6 monospace; }
+	.eyebrow { text-transform: uppercase; letter-spacing: .12em; }
+	.entries { list-style: none; padding: 0; }
+	.entries > li { padding: 1.5rem 0; border-bottom: 1px solid var(--line); }
+	.entries h2, .entries h3 { margin: 0 0 .6rem; }
+	.entries p { margin: .4rem 0; }
+	.draft { padding: .8rem 1rem; border: 1px dashed var(--accent); }
+	article img { max-width: 100%; height: auto; }
+	pre { overflow-x: auto; padding: 1rem; }
+	footer { padding: 1.5rem 0 2.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; text-align: center; }
+	@media (max-width: 600px) { header { align-items: center; flex-direction: column; gap: .5rem; } nav { gap: 1rem; } main { padding: 1.5rem 0 2.5rem; } }
 </style>

@@ -3,5 +3,6 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://heygio.github.io',
+  site: 'https://heygio.github.io',
+  trailingSlash: 'always',
 });

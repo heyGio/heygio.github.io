@@ -1,0 +1,101 @@
+[
+  {
+    "id": "cupid",
+    "added": "2026-09-10",
+    "title": "CUPID: Reconstructing UV Texture Maps for Interpretable Person-of-Interest Deepfake Detection",
+    "authors": "Affatato G., Mandelli S., Cannas E. D., Bestagini P., Tubaro S.",
+    "year": null,
+    "venue": null,
+    "status": "Submitted",
+    "url": "https://arxiv.org/abs/2606.20302",
+    "github": "https://github.com/polimi-ispl/CUPID",
+    "huggingFace": "https://huggingface.co/heyGio/CUPID",
+    "image": "cupid.webp",
+    "imageAlt": "CUPID visualization comparing real and fake videos with facial heatmap overlays."
+  },
+
+  {
+    "id": "surface-frames",
+    "added": "2026-09-10",
+    "title": "3D Morphable Models Meet Surface Frames for Generalizable and Robust Deepfake Detection",
+    "authors": "Affatato G., Ciamarra A., Cannas E. D., Mandelli S., Tondi B., Caldelli R., Bestagini P.",
+    "year": 2025,
+    "venue": "EUSIPCO 2025",
+    "status": "Published",
+    "url": "https://ieeexplore.ieee.org/abstract/document/11226603",
+    "image": "surface-frames.webp",
+    "imageAlt": "Surface Frames detection architectures combining UV texture and surface-frame features."
+  },
+  {
+    "id": "decoding-detectors",
+    "added": "2026-09-10",
+    "title": "Decoding Synthetic Face Detectors: Enhancing Interpretability with 3D Morphable Models",
+    "authors": "Affatato G., Cannas E. D., Mandelli S., Bestagini P., Marcon M., Tubaro S.",
+    "year": 2025,
+    "venue": "EUSIPCO 2025",
+    "status": "Published",
+    "url": "https://ieeexplore.ieee.org/abstract/document/11226709",
+    "image": "decoding-detectors.webp",
+    "imageAlt": "Detector interpretability framework mapping facial heatmaps onto reconstructed 3D face textures."
+  },
+  {
+    "id": "resource-aware-slam",
+    "added": "2026-09-10",
+    "title": "Towards Resource-aware Visual Inertial SLAM",
+    "authors": "Affatato G., Paracchini M., Palermo F., Trojaniello D., Ongarello T., Marcon M., Tubaro S.",
+    "year": 2024,
+    "venue": "ICVSE workshop at the European Conference on Computer Vision (ECCV) 2024",
+    "status": "Published",
+    "url": "https://drive.google.com/file/d/1dgAiWI3oA6O9nOYA0a0pQpKZSeonvu6-/view?usp=sharing",
+    "image": "resource-aware-slam.webp",
+    "imageAlt": "Visual SLAM observation scoring with camera views and grouped landmarks."
+  },
+  {
+    "id": "fourier-qualia",
+    "added": "2026-09-10",
+    "title": "Fourier Qualia Wavescapes: Hierarchical Analyses of Set Class Quality and Ambiguity",
+    "authors": "Pereira S., Affatato G., Bernardes G., Moss F. C.",
+    "year": 2024,
+    "venue": "9th Int. Conf. on Mathematics and Computation in Music 2024",
+    "status": "Published",
+    "url": "https://link.springer.com/chapter/10.1007/978-3-031-60638-0_25",
+    "image": "fourier-qualia.webp",
+    "imageAlt": "Fourier qualia color space with a musical trajectory across tonal qualities."
+  },
+  {
+    "id": "harmonic-analysis",
+    "added": "2026-09-10",
+    "title": "Animated Harmonic Analysis Using DFT Phase Spaces and Coefficient Products",
+    "authors": "Yust J., Affatato G., Moss F. C.",
+    "year": 2023,
+    "venue": "AMS-SMT Joint Annual Meeting 2023",
+    "status": "Poster",
+    "url": "https://fabian-moss.de/talk/animated-harmonic-analysis-using-dft-phase-spaces-and-coefficient-products/",
+    "image": "harmonic-analysis.webp",
+    "imageAlt": "Animated trajectory in the third Fourier coefficient phase space."
+  },
+  {
+    "id": "phantom-curves",
+    "added": "2026-09-10",
+    "title": "Phantom Curves: Scientific Discovery through Interactive Music Visualization",
+    "authors": "Moss F. C., Affatato G., Harasim D.",
+    "year": 2022,
+    "venue": "9th Int. Conf. on Digital Libraries for Musicology 2022",
+    "status": "Published",
+    "url": "https://dl.acm.org/doi/10.1145/3543882.3543886",
+    "image": "phantom-curves.webp",
+    "imageAlt": "Phantom curve diagram showing segment width over time in a hierarchical music visualization."
+  },
+  {
+    "id": "midiverto",
+    "added": "2026-09-10",
+    "title": "midiVERTO: A Web Application to Visualize Tonality in Real Time",
+    "authors": "Harasim D., Affatato G., Moss F. C.",
+    "year": 2022,
+    "venue": "8th Int. Conf. on Mathematics and Computation in Music 2022",
+    "status": "Published",
+    "url": "https://doi.org/10.1007/978-3-031-07015-0_31",
+    "image": "midiverto.webp",
+    "imageAlt": "midiVERTO tonality visualization with a rainbow-colored circular plot and scattered musical observations."
+  }
+]

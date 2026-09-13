@@ -1,0 +1,91 @@
+---
+import type { ImageMetadata } from 'astro';
+import Layout from '../layouts/Layout.astro';
+import publications from '../data/publications.json';
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/publications/*.{png,jpg,jpeg,webp,gif}',
+  { eager: true },
+);
+const years = [...new Set(publications.flatMap(paper => paper.year === null ? [] : [paper.year]))]
+  .sort((a, b) => b - a);
+const sections = [
+  { id: 'submissions', title: 'Submitted', papers: publications.filter(paper => paper.year === null) },
+  ...years.map(year => ({
+    id: `year-${year}`,
+    title: String(year),
+    papers: publications.filter(paper => paper.year === year),
+  })),
+];
+---
+<Layout title="Publications">
+  <p class="eyebrow">Research</p>
+  <h1>Publications</h1>
+  {sections.map(section => <section aria-labelledby={section.id}>
+    <h2 id={section.id}>{section.title}</h2>
+    <ul class="entries">
+      {section.papers.map(paper => {
+        const image = images[`../assets/publications/${paper.image}`]?.default;
+        const ImageWrapper = paper.url ? 'a' : 'div';
+        return <li id={paper.id} class="publication">
+          {image && <ImageWrapper
+            href={paper.url || undefined}
+            target={paper.url ? '_blank' : undefined}
+            rel={paper.url ? 'noopener noreferrer' : undefined}
+            aria-label={paper.url ? `Read ${paper.title} (opens in a new tab)` : undefined}
+          >
+            <img
+              class="thumbnail"
+              src={image.src}
+              alt={paper.imageAlt}
+              width={image.width}
+              height={image.height}
+              loading="lazy"
+              decoding="async"
+            />
+          </ImageWrapper>}
+          <div class="publication-text">
+            <h3>{paper.url ? <a href={paper.url} target="_blank" rel="noopener noreferrer" title="Opens in a new tab">{paper.title}</a> : paper.title}</h3>
+            {(paper.github || paper.huggingFace) && <div class="resource-badges">
+              {paper.github && <a class="resource-badge github" href={paper.github} target="_blank" rel="noopener noreferrer" aria-label="Code on GitHub (opens in a new tab)">
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21v-4c-4 1-6-2-6-2m12 6v-4c0-1-.3-1.5-1-2 3-.4 5-1.7 5-5 0-1.5-.5-2.5-1-3 .2-1 .2-2-.3-3L14 5a12 12 0 0 0-4 0L6.3 4C5.8 5 5.8 6 6 7c-.5.5-1 1.5-1 3 0 3.3 2 4.6 5 5-.7.5-1 1-1 2" /></svg>
+                Code
+              </a>}
+              {paper.huggingFace && <a class="resource-badge hugging-face" href={paper.huggingFace} target="_blank" rel="noopener noreferrer" aria-label="Model on Hugging Face (opens in a new tab)">
+                <img src="/icons/hugging-face.svg" width="18" height="18" alt="" />
+                Model
+              </a>}
+            </div>}
+            <p>{paper.authors}</p>
+            <p class="meta">
+              <span class:list={['status', { pending: paper.year === null }]}>{paper.status}</span>
+              {paper.venue && <> · {paper.venue}</>}
+            </p>
+          </div>
+        </li>;
+      })}
+    </ul>
+  </section>)}
+</Layout>
+<style>
+  section > h2 { margin: 1.5rem 0 .25rem; font-size: 1.4rem; }
+  .entries { margin: 0; }
+  .entries > .publication { padding: .75rem 0; }
+  .publication h3 { margin: 0 0 .3rem; font-size: 1.1rem; line-height: 1.3; }
+  .publication p { max-width: none; margin: .2rem 0; font-size: .9rem; line-height: 1.45; }
+  .publication .meta { font-size: .8rem; }
+  .publication { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 1rem; align-items: start; }
+  .thumbnail { display: block; width: 100%; height: 100px; object-fit: contain; border-radius: 6px; }
+  .publication-text { grid-column: 2; min-width: 0; overflow-wrap: anywhere; }
+  .status { font-weight: 700; }
+  .pending { color: var(--accent); }
+  .resource-badges { display: flex; flex-wrap: wrap; gap: .5rem; margin: .35rem 0; }
+  .resource-badge { display: inline-flex; align-items: center; gap: .35rem; min-height: 32px; padding: .2rem .65rem; border: 1px solid transparent; border-radius: 6px; font-size: .75rem; font-weight: 600; line-height: 1.4; text-decoration: none; }
+  .resource-badge svg, .resource-badge img { width: 18px; height: 18px; flex: none; object-fit: contain; }
+  .resource-badge.github { background: #24292f; color: #fff; border-color: #57606a; }
+  .resource-badge.hugging-face { background: #ffd21e; color: #24292f; border-color: #b89500; }
+  .resource-badge:hover { text-decoration: underline; }
+  @media (max-width: 600px) {
+    .publication { grid-template-columns: 88px minmax(0, 1fr); gap: .75rem; }
+    .thumbnail { height: 72px; }
+  }
+</style>
