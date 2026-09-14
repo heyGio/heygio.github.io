@@ -2,14 +2,27 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import publications from '../data/publications.json';
+import manualUpdates from '../data/updates.json';
 
+const announcements: { added: string; text: string; url?: string | null; linkText?: string }[] = manualUpdates;
 const posts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
 const updates = [
+  ...announcements.map(({ added, text, url, linkText = text }) => {
+    if (!url) return { added, before: text, link: null, after: '' };
+    const start = text.indexOf(linkText);
+    if (!linkText || start < 0) throw new Error(`Update linkText must occur in its text: ${text}`);
+    return {
+      added,
+      before: text.slice(0, start),
+      link: { text: linkText, url },
+      after: text.slice(start + linkText.length),
+    };
+  }),
   ...posts.map(post => ({
     added: post.data.added,
     title: post.data.title,
     href: `/blog/${post.id}/`,
-    emoji: '✍️',
+    emoji: '📑',
     kind: 'Blog post',
     draft: post.data.draft,
   })),
@@ -17,7 +30,7 @@ const updates = [
     added: paper.added,
     title: paper.title,
     href: `/publications/#${paper.id}`,
-    emoji: '📄',
+    emoji: '🧪',
     kind: 'Publication',
     draft: false,
   })),
@@ -53,11 +66,10 @@ const updates = [
     </div>
     <div class="about-copy">
       <h1>Hello, I'm Giovanni.</h1>
-      <p>I'm a PhD student at the <a href="https://ispl.deib.polimi.it/">Image and Sound Processing Lab</a>, Politecnico di Milano.</p>
-      <p>My research focuses on multimedia forensics, particularly video deepfake detection methods using deep learning and computer vision.</p>
-      <p>I developed <a href="https://dcmlab.github.io/midiVERTO/#/">midiVERTO</a>, an open-source web application for interactive music visualization.</p>
-      <h2>Research & writing</h2>
-      <p>Browse my <a href="/publications/">publications</a> or visit the <a href="/blog/">blog</a> for notes and explanations.</p>
+      <p>I'm a PhD researcher at the <a href="https://ispl.deib.polimi.it/">Image and Sound Processing Lab</a>, <a href="https://www.polimi.it/en">Politecnico di Milano</a>, working on <strong>person-of-interest deepfake detection</strong>. I combine self-supervised learning and 3D face modeling to learn identity cues from authentic videos and detect unseen manipulations with interpretable evidence.</p>
+      <p>I developed <a href="/publications/#cupid">CUPID</a>, a person-of-interest deepfake detector that learns identity representations from pose-normalized facial textures and produces forgery heatmaps. The <a href="https://github.com/polimi-ispl/CUPID">code is open source</a>.</p>
+      <p>I was a visiting researcher at Japan's <a href="https://www.nii.ac.jp/en/">National Institute of Informatics</a>, working on vision–language models for disinformation analysis, and a research intern at <a href="https://sensity.ai/">Sensity</a>, developing an image-enhancement pipeline for forensic analysis.</p>
+      <p>My background is in Music and Acoustic Engineering. At <a href="https://www.epfl.ch/labs/dcml/">EPFL's Digital and Cognitive Musicology Lab</a>, I developed <a href="https://dcmlab.github.io/midiVERTO/#/">midiVERTO</a>, an open-source application that makes musical structure explorable through interactive visualization.</p>
     </div>
   </section>
   <section id="updates" aria-labelledby="updates-title">
@@ -65,9 +77,13 @@ const updates = [
     <ul class="updates-list">
       {updates.map(update => <li>
         <time class="meta" datetime={update.added}>{update.added}</time>
-        {' · '}<span role="img" aria-label={update.kind}>{update.emoji}</span>
-        {' Added '}<a href={update.href}>{update.title}</a>.
-        {update.draft && <span class="meta"> · Draft · local preview only</span>}
+        {' · '}{'before' in update ? <>
+          {update.before}{update.link && <a href={update.link.url}>{update.link.text}</a>}{update.after}
+        </> : <>
+          <span role="img" aria-label={update.kind}>{update.emoji}</span>
+          {' Added '}<a href={update.href}>{update.title}</a>.
+          {update.draft && <span class="meta"> · Draft · local preview only</span>}
+        </>}
       </li>)}
     </ul>
   </section>
@@ -95,7 +111,7 @@ const updates = [
   }
   .about-copy > :first-child { margin-top: 0; }
   .updates-list { margin: 0; padding-left: 1.25rem; }
-  .updates-list li { margin: .6rem 0; padding-left: .25rem; }
+  .updates-list li { margin: .2rem 0; padding-left: .25rem; line-height: 1.35; }
   .updates-list time { white-space: nowrap; }
   .profile-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; list-style: none; padding: 0; margin: .65rem 0 0; }
   .profile-links li:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; }

@@ -17,6 +17,10 @@ const { Content } = await render(post);
     <p class="meta"><time datetime={post.data.date}>{post.data.date}</time></p>
     <h1>{post.data.title}</h1>
     {post.data.draft && <p class="draft">Unfinished draft. Visible only in local development; excluded from the production build.</p>}
-    <Content />
+    <div class="post-content"><Content /></div>
   </article>
 </Layout>
+<style>
+  .post-content :global(p), .post-content :global(li) { text-align: justify; hyphens: auto; }
+  .post-content :global(pre) { text-align: start; }
+</style>

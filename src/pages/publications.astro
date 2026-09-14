@@ -55,7 +55,9 @@ const sections = [
                 Model
               </a>}
             </div>}
-            <p>{paper.authors}</p>
+            <p>{paper.authors.split(', ').map((author, index) => <>
+              {index > 0 && ', '}{author === 'Affatato G.' ? <strong>{author}</strong> : author}
+            </>)}</p>
             <p class="meta">
               <span class:list={['status', { pending: paper.year === null }]}>{paper.status}</span>
               {paper.venue && <> · {paper.venue}</>}

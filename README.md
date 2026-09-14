@@ -37,7 +37,9 @@ Each post needs YAML frontmatter with `title`, `description`, `date`, `added` an
 
 Ignored drafts have no Git backup; back them up privately. Do not force-add the draft folder or put private draft assets in `public/`. Ignoring a file does not remove copies already committed to Git history.
 
-About's **Updates** list automatically combines the six latest publications and non-draft posts by `added` date when built. No separate list to maintain.
+About's **Updates** combines manual announcements, publications and non-draft posts, showing the latest six by `added` date. On equal dates, announcements precede posts, then publications.
+
+Add announcements to `src/data/updates.json` with `added` (`YYYY-MM-DD`) and `text`. Optional `url` links the text; omit it or use `null` for plain text. Optional `linkText` links only the first exact matching phrase inside `text`; omit it to link the whole announcement. Use `/` to link to this site's homepage. Announcements keep their own wording without an “Added” prefix.
 
 ### Publications
 
