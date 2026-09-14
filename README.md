@@ -19,6 +19,7 @@ Open http://localhost:4321/. Changes reload automatically.
 | --- | --- |
 | About text, contact badges, quote and portrait sizing | `src/pages/index.astro` |
 | Portrait image | `public/images/prof_pic.webp` |
+| Browser tab icon (64×64 transparent PNG) | `public/favicon.png` |
 | Shared colors, navigation, spacing and footer | `src/layouts/Layout.astro` |
 | Eye colors, Stochastic/Bayer dithering and gaze settings | `src/components/GazeEye.astro` |
 | Publications | `src/data/publications.json` |
